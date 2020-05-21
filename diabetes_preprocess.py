@@ -24,6 +24,9 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 
+from sagemaker_containers.beta.framework import (
+    content_types, encoders, env, modules, transformer, worker)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
@@ -55,7 +58,7 @@ if __name__ == '__main__':
        transformers = [('tx', numeric_transformer, list(data.columns)[1:])],
        remainder = 'drop')
     preprocessor.fit(data)
-
+    
     joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
 
 def model_fn(model_dir):
