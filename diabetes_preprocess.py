@@ -69,6 +69,22 @@ def model_fn(model_dir):
     preprocessor = joblib.load(os.path.join(model_dir, "model.joblib"))
     return preprocessor
 
+def input_fn(input_data, content_type):
+    """Parse input data payload
+    
+    We currently only take csv input. Since we need to process both labelled
+    and unlabelled data we first determine whether the label column is present
+    by looking at how many columns were provided.
+    """
+    if content_type == 'text/csv':
+        # Read the raw input data as CSV.
+        df = pd.read_csv(StringIO(input_data), 
+                         header=None)
+            
+        return df
+    else:
+        raise ValueError("{} not supported by script!".format(content_type))
+
 def predict_fn(input_data, model):
     """Preprocess input data
     We implement this because the default predict_fn uses .predict(), but our model is a preprocessor
