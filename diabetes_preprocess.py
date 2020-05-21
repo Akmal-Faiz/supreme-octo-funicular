@@ -56,7 +56,7 @@ if __name__ == '__main__':
        remainder = 'drop')
     preprocessor.fit(data)
 
-    #joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
+    joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
 
 def model_fn(model_dir):
     """Deserialized and return fitted model
