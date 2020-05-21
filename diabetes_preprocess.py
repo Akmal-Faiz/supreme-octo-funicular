@@ -17,12 +17,11 @@ import argparse
 import os
 import pandas as pd
 
-from sklearn.svm import SVC
+
 from sklearn.externals import joblib
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-import sklearn.metrics as metrics
-
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -46,16 +45,17 @@ if __name__ == '__main__':
                           'does not have permission to access the data.').format(args.train, "train"))
     raw_data = [ pd.read_csv(file, engine="python") for file in input_files ]
     data = pd.concat(raw_data)
-    #import pdb; pdb.set_trace()
-    data.drop('MemberID', axis = 1, inplace = True)
-    data.fillna(0, inplace = True)
-
-    X = data.drop('risk', axis = 1)
     
-    preprocessor = StandardScaler()
-    preprocessor.fit(X)
-    joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
+    numeric_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='constant', fill_value=0)),
+        ('scaler', StandardScaler())])
+    
+    preprocessor = ColumnTransformer(
+       transformers = ['tx', numeric_transformer, data.drop('MemberID')],
+       remainder = 'drop')
+    preprocessor.fit(concat_data)
 
+    joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
 
 def model_fn(model_dir):
     """Deserialized and return fitted model
