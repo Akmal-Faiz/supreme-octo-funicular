@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # Sagemaker specific arguments. Defaults are set in the environment variables.
     parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
     parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
-    parser.add_argument('--train', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
+    parser.add_argument('--train', type=str)#, default=os.environ['SM_CHANNEL_TRAIN'])
 
     args = parser.parse_args()
 
@@ -52,11 +52,11 @@ if __name__ == '__main__':
         ('scaler', StandardScaler())])
     
     preprocessor = ColumnTransformer(
-       transformers = ['tx', numeric_transformer, data.drop('MemberID')],
+       transformers = [('tx', numeric_transformer, list(data.columns)[1:])],
        remainder = 'drop')
-    preprocessor.fit(concat_data)
+    preprocessor.fit(data)
 
-    joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
+    #joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
 
 def model_fn(model_dir):
     """Deserialized and return fitted model
@@ -68,7 +68,6 @@ def model_fn(model_dir):
 
 def predict_fn(input_data, model):
     """Preprocess input data
-
     We implement this because the default predict_fn uses .predict(), but our model is a preprocessor
     so we want to use .transform().
     """
@@ -77,7 +76,6 @@ def predict_fn(input_data, model):
 
 def output_fn(prediction, accept):
     """Format prediction output
-
     The default accept/content-type between containers for serial inference is JSON.
     We also want to set the ContentType or mimetype as the same value as accept so the next
     container can read the response payload correctly.
