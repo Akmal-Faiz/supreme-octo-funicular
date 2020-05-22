@@ -1,25 +1,32 @@
 from __future__ import print_function
 
-import time
-import sys
-from io import StringIO
-import os
-import shutil
-
 import argparse
-import csv
-import json
-import numpy as np
+import os
 import pandas as pd
 
-from sklearn.compose import ColumnTransformer
+from sklearn.svm import SVC
 from sklearn.externals import joblib
-from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import Binarizer, StandardScaler, OneHotEncoder
-
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import sklearn.metrics as metrics
 from sagemaker_containers.beta.framework import (
     content_types, encoders, env, modules, transformer, worker)
+
+colnames =[
+    'MemberID',
+    'Gender',
+    'Age',
+    'BMI',
+    'hasDiabetes',
+    'avgMorningGlucose',
+    'avgPreMealGlucose',
+    'avgPostMealGlucose',
+    'mostRecentFastingGlucose',
+    'avgSteps',
+    'avgCalories',
+    'avgExercise'
+]
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -111,7 +118,7 @@ def predict_fn(input_data, model):
     so we want to use .transform().
     """
     prediction = model.predict(input_data)
-    return prediction
+    return features
 
 def output_fn(prediction, accept):
     """Format prediction output
