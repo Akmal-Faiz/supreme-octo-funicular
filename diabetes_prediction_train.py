@@ -105,7 +105,7 @@ def input_fn(input_data, content_type):
     if content_type == 'text/csv':
         # Read the raw input data as CSV.
         df = pd.read_csv(StringIO(input_data))
-        df.columns = colnames
+        #df.columns = colnames
         return df
     else:
         raise ValueError("{} not supported by script!".format(content_type))
