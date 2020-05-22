@@ -69,7 +69,7 @@ if __name__ == '__main__':
     )
     final_pipeline.fit(X_train,y_train)
     
-
+    print(os.path.join(args.model_dir, "model.joblib"))
     joblib.dump(final_pipeline, os.path.join(args.model_dir, "model.joblib"))
 
 def input_fn(input_data, content_type):
