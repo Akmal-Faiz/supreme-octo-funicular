@@ -1,27 +1,23 @@
-#  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-#  
-#  Licensed under the Apache License, Version 2.0 (the "License").
-#  You may not use this file except in compliance with the License.
-#  A copy of the License is located at
-#  
-#      http://www.apache.org/licenses/LICENSE-2.0
-#  
-#  or in the "license" file accompanying this file. This file is distributed 
-#  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
-#  express or implied. See the License for the specific language governing 
-#  permissions and limitations under the License.
-
 from __future__ import print_function
 
-import argparse
+import time
+import sys
+from io import StringIO
 import os
+import shutil
+
+import argparse
+import csv
+import json
+import numpy as np
 import pandas as pd
 
-from sklearn.svm import SVC
+from sklearn.compose import ColumnTransformer
 from sklearn.externals import joblib
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-import sklearn.metrics as metrics
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import Binarizer, StandardScaler, OneHotEncoder
+
 from sagemaker_containers.beta.framework import (
     content_types, encoders, env, modules, transformer, worker)
 
