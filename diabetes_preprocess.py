@@ -1,31 +1,41 @@
-#  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-#  
-#  Licensed under the Apache License, Version 2.0 (the "License").
-#  You may not use this file except in compliance with the License.
-#  A copy of the License is located at
-#  
-#      http://www.apache.org/licenses/LICENSE-2.0
-#  
-#  or in the "license" file accompanying this file. This file is distributed 
-#  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either 
-#  express or implied. See the License for the specific language governing 
-#  permissions and limitations under the License.
-
 from __future__ import print_function
 
-import argparse
+import time
+import sys
+from io import StringIO
 import os
+import shutil
+
+import argparse
+import csv
+import json
+import numpy as np
 import pandas as pd
 
-
-from sklearn.externals import joblib
-from sklearn.preprocessing import StandardScaler
-from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
+from sklearn.externals import joblib
+from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import Binarizer, StandardScaler, OneHotEncoder
 
 from sagemaker_containers.beta.framework import (
     content_types, encoders, env, modules, transformer, worker)
+
+colnames =[
+    'MemberID',
+    'Gender',
+    'Age',
+    'BMI',
+    'hasDiabetes',
+    'avgMorningGlucose',
+    'avgPreMealGlucose',
+    'avgPostMealGlucose',
+    'mostRecentFastingGlucose',
+    'avgSteps',
+    'avgCalories',
+    'avgExercise'
+]
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -61,14 +71,6 @@ if __name__ == '__main__':
     
     joblib.dump(preprocessor, os.path.join(args.model_dir, "model.joblib"))
 
-def model_fn(model_dir):
-    """Deserialized and return fitted model
-    
-    Note that this should have the same name as the serialized model in the main method
-    """
-    preprocessor = joblib.load(os.path.join(model_dir, "model.joblib"))
-    return preprocessor
-
 def input_fn(input_data, content_type):
     """Parse input data payload
     
@@ -78,18 +80,28 @@ def input_fn(input_data, content_type):
     """
     if content_type == 'text/csv':
         # Read the raw input data as CSV.
-        df = pd.read_csv(StringIO(input_data), 
-                         header=None)
-            
+        df = pd.read_csv(StringIO(input_data))
+        df.columns = colnames
         return df
     else:
         raise ValueError("{} not supported by script!".format(content_type))
+        
+    
+    
+def model_fn(model_dir):
+    """Deserialized and return fitted model
+    
+    Note that this should have the same name as the serialized model in the main method
+    """
+    preprocessor = joblib.load(os.path.join(model_dir, "model.joblib"))
+    return preprocessor
 
 def predict_fn(input_data, model):
     """Preprocess input data
     We implement this because the default predict_fn uses .predict(), but our model is a preprocessor
     so we want to use .transform().
     """
+    print(input_data.head())
     features = model.transform(input_data)
     return features
 
