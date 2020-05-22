@@ -115,7 +115,7 @@ def predict_fn(input_data, model):
     so we want to use .transform().
     """
     prediction = model.predict(input_data)
-    return features
+    return prediction
 
 def output_fn(prediction, accept):
     """Format prediction output
