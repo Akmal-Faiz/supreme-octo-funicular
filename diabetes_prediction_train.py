@@ -119,7 +119,7 @@ def model_fn(model_dir):
     """
     preprocessor = joblib.load(os.path.join(model_dir, "model.joblib"))
     return preprocessor
-
+'''
 def predict_fn(input_data, model):
     """Preprocess input data
     We implement this because the default predict_fn uses .predict(), but our model is a preprocessor
@@ -146,3 +146,4 @@ def output_fn(prediction, accept):
         return worker.Response(encoders.encode(prediction, accept), accept, mimetype=accept)
     else:
         raise RuntimeException("{} accept type is not supported by this script.".format(accept))
+'''
