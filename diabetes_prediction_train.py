@@ -102,9 +102,9 @@ def predict_fn(input_data, model):
     """
     
     features = model.predict(input_data)
-    print('input length:', len(input_data))
-    print('output shape:',features.shape)
-    return features
+    out = input_data
+    out['predicted_risk'] = features
+    return out
 
 def output_fn(prediction, accept):
     """Format prediction output
