@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     # Hyperparameters are described here. In this simple example we are just including one hyperparameter.
     # parser.add_argument('--max_leaf_nodes', type=int, default=-1)
-
+    print('reading args')
     # Sagemaker specific arguments. Defaults are set in the environment variables.
     parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
     parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
