@@ -100,7 +100,10 @@ def predict_fn(input_data, model):
     We implement this because the default predict_fn uses .predict(), but our model is a preprocessor
     so we want to use .transform().
     """
+    
     features = model.predict(input_data)
+    print('input length:', len(input_data))
+    print('output shape:',features.shape)
     return features
 
 def output_fn(prediction, accept):
