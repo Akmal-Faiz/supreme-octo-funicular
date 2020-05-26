@@ -103,16 +103,16 @@ def predict_fn(input_data, model):
     """
     print(len(input_data))
     pred = model.predict(input_data)
-    #out = pd.DataFrame(input_data['MemberID'])
+    out = pd.DataFrame(input_data['MemberID'])
     
-    #out = pd.DataFrame({'prediction':pred}) 
-    #out['PredictionTypeID'] = 1
+    out = pd.DataFrame({'prediction':pred}) 
+    out['PredictionTypeID'] = 1
     
-    #now = datetime.datetime.now()
-    #out['day'] = now.day
-    #out['month'] = now.month
-    #out['year'] = now.year
-    return pred
+    now = datetime.datetime.now()
+    out['day'] = now.day
+    out['month'] = now.month
+    out['year'] = now.year
+    return out
 
 def output_fn(prediction, accept):
     """Format prediction output
