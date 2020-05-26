@@ -103,9 +103,9 @@ def predict_fn(input_data, model):
     """
     #print(input_data.head())
     pred = model.predict(input_data)
-    out = pd.DataFrame(input_data['MemberID'])
+    #out = pd.DataFrame(input_data['MemberID'])
     
-    out['Prediction'] = pred 
+    out = pd.DataFrame({'prediction':pred}) 
     #out['PredictionTypeID'] = 1
     
     now = datetime.datetime.now()
