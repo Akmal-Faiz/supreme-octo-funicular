@@ -104,6 +104,7 @@ def predict_fn(input_data, model):
     
     pred = model.predict(input_data)
     out = input_data['MemberID']
+    print(type(out))
     out['Prediction'] = pred 
     out['PredictionTypeID'] = 1
     
