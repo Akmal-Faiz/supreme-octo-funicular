@@ -5,6 +5,7 @@ import sys
 from io import StringIO
 import os
 import shutil
+import datetime
 
 import argparse
 import csv
@@ -101,9 +102,15 @@ def predict_fn(input_data, model):
     so we want to use .transform().
     """
     
-    features = model.predict(input_data)
-    out = input_data
-    out['predicted_risk'] = features
+    pred = model.predict(input_data)
+    out = input_data['MemberID']
+    out['Prediction'] = pred 
+    out['PredictionTypeID'] = 1
+    
+    now = datetime.datetime.now()
+    out['day'] = now.day
+    out['month'] = now.month
+    out['year'] = now.year
     return out
 
 def output_fn(prediction, accept):
