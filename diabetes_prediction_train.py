@@ -105,13 +105,13 @@ def predict_fn(input_data, model):
     pred = model.predict(input_data)
     out = pd.DataFrame(input_data['MemberID'])
     
-    out = pd.DataFrame({'prediction':pred}) 
     out['PredictionTypeID'] = 1
     
     now = datetime.datetime.now()
     out['day'] = now.day
     out['month'] = now.month
     out['year'] = now.year
+    out['prediction'] = pred 
     return out
 
 def output_fn(prediction, accept):
