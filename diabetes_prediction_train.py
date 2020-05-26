@@ -101,18 +101,18 @@ def predict_fn(input_data, model):
     We implement this because the default predict_fn uses .predict(), but our model is a preprocessor
     so we want to use .transform().
     """
-    #print(input_data.head())
+    print(len(input_data)
     pred = model.predict(input_data)
     #out = pd.DataFrame(input_data['MemberID'])
     
-    out = pd.DataFrame({'prediction':pred}) 
+    #out = pd.DataFrame({'prediction':pred}) 
     #out['PredictionTypeID'] = 1
     
-    now = datetime.datetime.now()
+    #now = datetime.datetime.now()
     #out['day'] = now.day
     #out['month'] = now.month
     #out['year'] = now.year
-    return out
+    return pred
 
 def output_fn(prediction, accept):
     """Format prediction output
