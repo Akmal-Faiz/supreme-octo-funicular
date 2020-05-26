@@ -101,9 +101,9 @@ def predict_fn(input_data, model):
     We implement this because the default predict_fn uses .predict(), but our model is a preprocessor
     so we want to use .transform().
     """
-    print(input_data.head())
+    #print(input_data.head())
     pred = model.predict(input_data)
-    out = input_data['MemberID']
+    out = pd.DataFrame(input_data['MemberID'])
     
     out['Prediction'] = pred 
     out['PredictionTypeID'] = 1
