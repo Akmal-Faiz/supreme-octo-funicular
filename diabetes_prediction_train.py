@@ -102,10 +102,10 @@ def predict_fn(input_data, model):
     so we want to use .transform().
     """
     #print(input_data.head())
-    pred = model.predict(input_data)
+    #pred = model.predict(input_data)
     out = pd.DataFrame(input_data['MemberID'])
     
-    out['Prediction'] = pred 
+    #out['Prediction'] = pred 
     out['PredictionTypeID'] = 1
     
     now = datetime.datetime.now()
